@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'maven:3.8.5-openjdk-11'
+            image 'carloscastilloaguilar/maven-docker:3.8.5-openjdk-11'
             args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
@@ -37,7 +37,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    dockerImage = docker.build("${PROJECT_NAME}:latest", "${PROJECT_NAME}")
+                    docker.build("${PROJECT_NAME}:latest", "${PROJECT_NAME}")
                 }
             }
         }
