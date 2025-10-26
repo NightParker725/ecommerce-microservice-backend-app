@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+
+    environment {
+        PROJECT_NAME = "product-service"
+        JAR_NAME = "product-service-v0.1.0.jar"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build with Maven') {
+            steps {
+                dir("${PROJECT_NAME}") {
+                    sh './mvnw clean package -DskipTests'
+                }
+            }
+        }
+
+        stage('Run Unit Tests') {
+            steps {
+                dir("${PROJECT_NAME}") {
+                    sh './mvnw test'
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    dockerImage = docker.build("${PROJECT_NAME}:latest", "${PROJECT_NAME}")
+                }
+            }
+        }
+    }
+}
