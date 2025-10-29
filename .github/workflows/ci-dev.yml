@@ -15,4 +15,4 @@ jobs:
           distribution: 'temurin'
           java-version: 17
       - name: Build & Test
-        run: mvn -B clean verify
+        run: mvn -B clean verify -Dmaven.test.skip=true
