@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+
+    environment {
+        PROJECT_NAME = "api-gateway"
+        JAR_NAME = "api-gateway-v0.1.0.jar"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build with Maven') {
+            steps {
+                dir("${PROJECT_NAME}") {
+                    sh './mvnw clean package -DskipTests'
+                }
+            }
+        }
+
+        stage('Run Unit Tests') {
+            steps {
+                dir("${PROJECT_NAME}") {
+                    sh './mvnw test'
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh "docker build -t ${PROJECT_NAME}:latest ${PROJECT_NAME}"
+                }
+            }
+        }
+    }
+}
