@@ -1,4 +1,4 @@
-package com.selimhorri.app.controller;
+package com.selimhorri.app.e2e;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selimhorri.app.dto.OrderDto;
@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class OrderControllerE2ETest {
+public class OrderE2ETest {
 
     @Autowired
     private MockMvc mockMvc;

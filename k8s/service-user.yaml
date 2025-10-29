@@ -8,6 +8,6 @@ spec:
     app: user-service
   ports:
     - protocol: TCP
-      port: 8081
-      targetPort: 8081
+      port: 8700
+      targetPort: 8700
   type: ClusterIP
