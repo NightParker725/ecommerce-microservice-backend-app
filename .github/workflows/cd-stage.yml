@@ -1,0 +1,22 @@
+name: CD - Stage
+
+on:
+  push:
+    branches: [ "stage" ]
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push Docker images
+        run: |
+          for dir in user-service product-service order-service shipping-service favourite-service payment-service; do
+            docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/$dir:stage ./$dir
+            docker push ${{ secrets.DOCKERHUB_USERNAME }}/$dir:stage
+          done

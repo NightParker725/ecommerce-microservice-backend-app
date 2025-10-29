@@ -1,0 +1,10 @@
+Release 2025-10-29 12:00
+------------------------
+- Deployment successful on Kubernetes
+- Services updated:
+  - user-service
+  - product-service
+  - order-service
+  - shipping-service
+  - favourite-service
+  - payment-service

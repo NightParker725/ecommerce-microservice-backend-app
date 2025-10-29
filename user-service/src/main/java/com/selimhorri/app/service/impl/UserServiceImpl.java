@@ -7,6 +7,8 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.selimhorri.app.domain.Credential;
+import com.selimhorri.app.domain.User;
 import com.selimhorri.app.dto.UserDto;
 import com.selimhorri.app.exception.wrapper.UserObjectNotFoundException;
 import com.selimhorri.app.helper.UserMappingHelper;
@@ -42,12 +44,27 @@ public class UserServiceImpl implements UserService {
 				.orElseThrow(() -> new UserObjectNotFoundException(String.format("User with id: %d not found", userId)));
 	}
 	
-	@Override
-	public UserDto save(final UserDto userDto) {
-		log.info("*** UserDto, service; save user *");
-		return UserMappingHelper.map(this.userRepository.save(UserMappingHelper.map(userDto)));
-	}
-	
+@Override
+public UserDto save(UserDto userDto) {
+    User user = new User();
+    user.setFirstName(userDto.getFirstName());
+    user.setLastName(userDto.getLastName());
+    user.setEmail(userDto.getEmail());
+    user.setPhone(userDto.getPhone());
+    user.setImageUrl(userDto.getImageUrl());
+
+    Credential credential = new Credential();
+    credential.setUsername(userDto.getCredentialDto().getUsername());
+    credential.setPassword(userDto.getCredentialDto().getPassword());
+    credential.setIsEnabled(userDto.getCredentialDto().getIsEnabled());
+    credential.setUser(user);
+
+    user.setCredential(credential);
+
+    userRepository.save(user);
+    return userDto;
+}
+
 	@Override
 	public UserDto update(final UserDto userDto) {
 		log.info("*** UserDto, service; update user *");

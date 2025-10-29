@@ -1,0 +1,22 @@
+name: Deploy - Prod
+
+on:
+  push:
+    branches: [ "prod" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: azure/setup-kubectl@v3
+      - name: Configure Kubeconfig
+        run: echo "${{ secrets.KUBECONFIG_CONTENTS }}" > kubeconfig.yml
+      - name: Apply Kubernetes manifests
+        run: |
+          kubectl --kubeconfig=kubeconfig.yml apply -f k8s/
+      - name: Generate Release Notes
+        run: |
+          echo "Release $(date '+%Y-%m-%d %H:%M')" > release_notes.txt
+          git add release_notes.txt
+          git commit -m "Auto release notes"
